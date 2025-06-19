@@ -1,0 +1,432 @@
+This file is a merged representation of the entire codebase, combined into a single document by Repomix.
+
+<file_summary>
+This section contains a summary of this file.
+
+<purpose>
+This file contains a packed representation of the entire repository's contents.
+It is designed to be easily consumable by AI systems for analysis, code review,
+or other automated processes.
+</purpose>
+
+<file_format>
+The content is organized as follows:
+1. This summary section
+2. Repository information
+3. Directory structure
+4. Repository files (if enabled)
+5. Multiple file entries, each consisting of:
+  - File path as an attribute
+  - Full contents of the file
+</file_format>
+
+<usage_guidelines>
+- This file should be treated as read-only. Any changes should be made to the
+  original repository files, not this packed version.
+- When processing this file, use the file path to distinguish
+  between different files in the repository.
+- Be aware that this file may contain sensitive information. Handle it with
+  the same level of security as you would the original repository.
+</usage_guidelines>
+
+<notes>
+- Some files may have been excluded based on .gitignore rules and Repomix's configuration
+- Binary files are not included in this packed representation. Please refer to the Repository Structure section for a complete list of file paths, including binary files
+- Files matching patterns in .gitignore are excluded
+- Files matching default ignore patterns are excluded
+- Files are sorted by Git change count (files with more changes are at the bottom)
+</notes>
+
+</file_summary>
+
+<directory_structure>
+.gitignore
+index.html
+package.json
+postcss.config.js
+README.md
+src/api/groq.ts
+src/api/openrouter.ts
+src/api/prompts.ts
+src/App.css
+src/App.tsx
+src/components/CompetitorTable.tsx
+src/components/InputForm.tsx
+src/components/LoadingState.tsx
+src/hooks/useCompetitorAnalysis.ts
+src/index.css
+src/main.tsx
+src/types/index.ts
+src/utils/aggregation.ts
+src/utils/normalization.ts
+tailwind.config.js
+tsconfig.json
+tsconfig.node.json
+vite.config.ts
+</directory_structure>
+
+<files>
+This section contains the contents of the repository's files.
+
+<file path=".gitignore">
+# Logs
+logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+lerna-debug.log*
+
+node_modules
+dist
+dist-ssr
+*.local
+
+# Editor directories and files
+.vscode/*
+!.vscode/extensions.json
+.idea
+.DS_Store
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
+
+# Environment variables
+.env
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+</file>
+
+<file path="index.html">
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="/vite.svg" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Competitor Analysis Table</title>
+  </head>
+  <body>
+    <div id="root"></div>
+    <script type="module" src="/src/main.tsx"></script>
+  </body>
+</html>
+</file>
+
+<file path="package.json">
+{
+  "name": "comp-table",
+  "private": true,
+  "version": "0.1.0",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "tsc && vite build",
+    "preview": "vite preview",
+    "lint": "eslint . --ext ts,tsx --report-unused-disable-directives --max-warnings 0"
+  },
+  "dependencies": {
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0"
+  },
+  "devDependencies": {
+    "@types/react": "^18.2.43",
+    "@types/react-dom": "^18.2.17",
+    "@typescript-eslint/eslint-plugin": "^6.14.0",
+    "@typescript-eslint/parser": "^6.14.0",
+    "@vitejs/plugin-react": "^4.2.1",
+    "autoprefixer": "^10.4.16",
+    "eslint": "^8.55.0",
+    "eslint-plugin-react-hooks": "^4.6.0",
+    "eslint-plugin-react-refresh": "^0.4.5",
+    "postcss": "^8.4.32",
+    "tailwindcss": "^3.3.6",
+    "typescript": "^5.2.2",
+    "vite": "^5.0.8"
+  }
+}
+</file>
+
+<file path="postcss.config.js">
+export default {
+    plugins: {
+      tailwindcss: {},
+      autoprefixer: {},
+    },
+  }
+</file>
+
+<file path="README.md">
+
+</file>
+
+<file path="src/api/groq.ts">
+
+</file>
+
+<file path="src/api/openrouter.ts">
+
+</file>
+
+<file path="src/api/prompts.ts">
+
+</file>
+
+<file path="src/App.css">
+
+</file>
+
+<file path="src/App.tsx">
+import React, { useState } from 'react';
+import { InputForm } from './components/InputForm';
+import { LoadingState } from './components/LoadingState';
+import { CompetitorTable } from './components/CompetitorTable';
+import { useCompetitorAnalysis } from './hooks/useCompetitorAnalysis';
+import './App.css';
+
+function App() {
+  const [apiKeys, setApiKeys] = useState({
+    openRouter: '',
+    groq: ''
+  });
+  const [showApiKeys, setShowApiKeys] = useState(true);
+
+  const { isLoading, error, result, progress, analyze, reset } = useCompetitorAnalysis({
+    openRouterApiKey: apiKeys.openRouter,
+    groqApiKey: apiKeys.groq
+  });
+
+  const handleApiKeySubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (apiKeys.openRouter && apiKeys.groq) {
+      setShowApiKeys(false);
+    }
+  };
+
+  const handleAnalyze = async (target: string) => {
+    try {
+      await analyze(target);
+    } catch (error) {
+      console.error('Analysis failed:', error);
+    }
+  };
+
+  if (showApiKeys) {
+    return (
+      <div className="min-h-screen bg-gray-50 py-12 px-4">
+        <div className="w-full max-w-md mx-auto">
+          <div className="bg-white shadow-sm rounded-lg p-6">
+            <h1 className="text-2xl font-bold text-gray-900 mb-4">API Configuration</h1>
+            <p className="text-gray-600 mb-6">
+              Enter your API keys to get started. You'll need accounts with both OpenRouter and Groq.
+            </p>
+            
+            <form onSubmit={handleApiKeySubmit} className="space-y-4">
+              <div>
+                <label htmlFor="openrouter" className="block text-sm font-medium text-gray-700 mb-2">
+                  OpenRouter API Key
+                </label>
+                <input
+                  id="openrouter"
+                  type="password"
+                  value={apiKeys.openRouter}
+                  onChange={(e) => setApiKeys(prev => ({ ...prev, openRouter: e.target.value }))}
+                  placeholder="sk-or-..."
+                  className="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                  required
+                />
+              </div>
+              
+              <div>
+                <label htmlFor="groq" className="block text-sm font-medium text-gray-700 mb-2">
+                  Groq API Key
+                </label>
+                <input
+                  id="groq"
+                  type="password"
+                  value={apiKeys.groq}
+                  onChange={(e) => setApiKeys(prev => ({ ...prev, groq: e.target.value }))}
+                  placeholder="gsk_..."
+                  className="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                  required
+                />
+              </div>
+              
+              <button
+                type="submit"
+                className="w-full bg-blue-600 text-white py-2 px-4 rounded-md hover:bg-blue-700 transition-colors"
+              >
+                Continue
+              </button>
+            </form>
+            
+            <div className="mt-6 p-4 bg-blue-50 rounded-md">
+              <h3 className="text-sm font-semibold text-blue-900 mb-2">Get API Keys:</h3>
+              <ul className="text-sm text-blue-700 space-y-1">
+                <li>• <a href="https://openrouter.ai/" target="_blank" rel="noopener noreferrer" className="underline">OpenRouter</a> - For multiple LLM access</li>
+                <li>• <a href="https://console.groq.com/" target="_blank" rel="noopener noreferrer" className="underline">Groq</a> - For fast normalization</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  return (
+    <div className="min-h-screen bg-gray-50 py-12 px-4">
+      <div className="max-w-7xl mx-auto space-y-8">
+        {!result && (
+          <InputForm onSubmit={handleAnalyze} isLoading={isLoading} />
+        )}
+        
+        {isLoading && (
+          <LoadingState stage={progress.stage} message={progress.message} />
+        )}
+        
+        {error && (
+          <div className="w-full max-w-2xl mx-auto">
+            <div className="bg-red-50 border border-red-200 rounded-lg p-4">
+              <div className="flex">
+                <span className="text-red-400 mr-3">❌</span>
+                <div>
+                  <h3 className="text-red-800 font-semibold">Analysis Failed</h3>
+                  <p className="text-red-700 text-sm mt-1">{error}</p>
+                  <button
+                    onClick={reset}
+                    className="mt-3 text-red-600 hover:text-red-800 text-sm underline"
+                  >
+                    Try Again
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        )}
+        
+        {result && (
+          <div className="space-y-4">
+            <div className="flex justify-center">
+              <button
+                onClick={reset}
+                className="bg-gray-600 text-white py-2 px-4 rounded-md hover:bg-gray-700 transition-colors"
+              >
+                New Analysis
+              </button>
+            </div>
+            <CompetitorTable result={result} />
+          </div>
+        )}
+      </div>
+    </div>
+  );
+}
+
+export default App;
+</file>
+
+<file path="src/components/CompetitorTable.tsx">
+
+</file>
+
+<file path="src/components/InputForm.tsx">
+
+</file>
+
+<file path="src/components/LoadingState.tsx">
+
+</file>
+
+<file path="src/hooks/useCompetitorAnalysis.ts">
+
+</file>
+
+<file path="src/index.css">
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+</file>
+
+<file path="src/main.tsx">
+
+</file>
+
+<file path="src/types/index.ts">
+
+</file>
+
+<file path="src/utils/aggregation.ts">
+
+</file>
+
+<file path="src/utils/normalization.ts">
+
+</file>
+
+<file path="tailwind.config.js">
+/** @type {import('tailwindcss').Config} */
+export default {
+    content: [
+      "./index.html",
+      "./src/**/*.{js,ts,jsx,tsx}",
+    ],
+    theme: {
+      extend: {},
+    },
+    plugins: [],
+  }
+</file>
+
+<file path="tsconfig.json">
+{
+    "compilerOptions": {
+      "target": "ES2020",
+      "useDefineForClassFields": true,
+      "lib": ["ES2020", "DOM", "DOM.Iterable"],
+      "module": "ESNext",
+      "skipLibCheck": true,
+      "moduleResolution": "bundler",
+      "allowImportingTsExtensions": true,
+      "resolveJsonModule": true,
+      "isolatedModules": true,
+      "noEmit": true,
+      "jsx": "react-jsx",
+      "strict": true,
+      "noUnusedLocals": true,
+      "noUnusedParameters": true,
+      "noFallthroughCasesInSwitch": true
+    },
+    "include": ["src"],
+    "references": [{ "path": "./tsconfig.node.json" }]
+  }
+</file>
+
+<file path="tsconfig.node.json">
+{
+  "compilerOptions": {
+    "composite": true,
+    "skipLibCheck": true,
+    "module": "ESNext",
+    "moduleResolution": "bundler",
+    "allowSyntheticDefaultImports": true
+  },
+  "include": ["vite.config.ts"]
+}
+</file>
+
+<file path="vite.config.ts">
+import { defineConfig } from 'vite'
+import react from '@vitejs/plugin-react'
+
+// https://vitejs.dev/config/
+export default defineConfig({
+  plugins: [react()],
+})
+</file>
+
+</files>
