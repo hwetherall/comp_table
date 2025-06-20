@@ -1,4 +1,4 @@
- // Core data types for the comp_table application
+// Core data types for the comp_table application
 
 export interface Entity {
     name: string;
@@ -10,6 +10,7 @@ export interface Entity {
   export interface Competitor extends Entity {
     frequency: number;
     rank?: number;
+    description?: string;
   }
   
   export interface ComparisonCriteria {
@@ -64,4 +65,11 @@ export interface Entity {
   export interface NormalizationResponse {
     normalized: Record<string, string>;
     groups?: Record<string, string[]>;
+  }
+
+  export interface CompetitorDescription {
+    company: string;
+    description: string;
+    loading?: boolean;
+    error?: boolean;
   }

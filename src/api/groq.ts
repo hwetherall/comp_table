@@ -123,6 +123,61 @@ Answer:`;
     }
   }
 
+  async getCompetitorDescription(company: string, targetContext: string): Promise<string> {
+    const prompt = `Provide a 2-sentence description of ${company} in the context of being a competitor to ${targetContext}.
+
+The first sentence should describe what the company does.
+The second sentence should explain HOW they compete with ${targetContext}.
+
+Keep it concise and factual. Maximum 50 words total.
+
+Example format:
+"Netflix is a streaming service that provides movies and TV shows on-demand. They compete by offering exclusive content and a subscription model that rivals traditional cable TV services."
+
+Description:`;
+
+    try {
+      const response = await fetch(GROQ_API_URL, {
+        method: 'POST',
+        headers: {
+          'Authorization': `Bearer ${this.apiKey}`,
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          model: 'meta-llama/llama-4-maverick-17b-128e-instruct',
+          messages: [
+            {
+              role: 'system',
+              content: 'Provide concise, factual 2-sentence company descriptions. Focus on what they do and how they compete.'
+            },
+            {
+              role: 'user',
+              content: prompt
+            }
+          ],
+          temperature: 0.3,
+          max_tokens: 80
+        })
+      });
+
+      if (!response.ok) {
+        throw new Error(`Groq API error: ${response.statusText}`);
+      }
+
+      const data = await response.json();
+      let content = data.choices[0]?.message?.content || 'No description available.';
+      
+      // Clean up the response
+      content = content.replace(/^(Description:|Answer:)\s*/i, '');
+      content = content.trim();
+      
+      return content || 'No description available.';
+    } catch (error) {
+      console.error('Competitor description error:', error);
+      return 'Error loading description';
+    }
+  }
+
   private buildNormalizationPrompt(request: NormalizationRequest): string {
     if (request.type === 'competitors') {
       return `
