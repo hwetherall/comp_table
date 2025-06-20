@@ -12,12 +12,6 @@ export const RawOutcomesTable: React.FC<RawOutcomesTableProps> = ({
   competitorResponses, 
   criteriaResponses 
 }) => {
-  // Get unique model names from all responses
-  const allModels = Array.from(new Set([
-    ...competitorResponses.map(r => r.model),
-    ...criteriaResponses.map(r => r.model)
-  ]));
-
   return (
     <div className="w-full space-y-6">
       <div className="mb-4">

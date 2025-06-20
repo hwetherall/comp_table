@@ -33,7 +33,7 @@ export const CompetitorTable: React.FC<CompetitorTableProps> = ({ result, groqAp
 
     try {
       // First, get all descriptions
-      const descriptionPromises = result.competitors.map(async (competitor, index) => {
+      const descriptionPromises = result.competitors.map(async (competitor) => {
         const competitorKey = competitor.name;
         
         // Skip if already have description

@@ -137,7 +137,7 @@ function inferUnit(name: string): string | undefined {
   return undefined;
 }
 
-function inferScale(name: string, type?: string): string | undefined {
+function inferScale(_name: string, type?: string): string | undefined {
   if (type === 'qualitative') {
     return '1-5';
   }
