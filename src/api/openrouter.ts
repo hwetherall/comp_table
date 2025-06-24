@@ -6,9 +6,7 @@ const OPENROUTER_API_URL = 'https://openrouter.ai/api/v1/chat/completions';
 export const LLM_MODELS = [
   'anthropic/claude-sonnet-4',
   'google/gemini-2.5-flash-lite-preview-06-17',
-  'x-ai/grok-3-mini-beta',
   'openai/gpt-4.1-mini',
-  'mistralai/magistral-small-2506',
   'deepseek/deepseek-chat-v3-0324',
   'qwen/qwen-2.5-7b-instruct',
   'perplexity/sonar',
